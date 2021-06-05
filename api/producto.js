@@ -1,5 +1,4 @@
-class Producto{
-     
+class Producto{     
     constructor(){
         this.title = "";
         this.price = 0;
@@ -7,7 +6,7 @@ class Producto{
         this.id = -1;
         this.items= [];
     }
-
+ 
     saveProduct(item){
         let id;
         
