@@ -5,8 +5,8 @@ class Producto{
         this.thumbnail = "";
         this.id = -1;
         this.items= [];
-    }
- 
+    } 
+    
     saveProduct(item){
         let id;
         
