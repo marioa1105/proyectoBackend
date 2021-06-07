@@ -1,14 +1,16 @@
 const express = require('express');
 const route = express.Router();
 const Producto = require('../api/producto')
-let objProductos = new Producto();
+//let objProductos = new Producto();
 route.get('/',(req,res)=>{
 
 });
 
+
 route.get('/productos',(req,res)=>{
     try{
-        let items = objProductos.getProducts();
+        
+        let items = Producto.getProducts();
         res.json(items);
 
     }catch(err){
@@ -19,7 +21,8 @@ route.get('/productos',(req,res)=>{
 
 route.get('/productos/:id',(req,res)=>{
     try{
-        let item = objProductos.getProductById(req.params.id);
+        console.log('getbydi')
+        let item = Producto.getProductById(req.params.id);
         res.json(item);
 
     }catch(err){
@@ -29,8 +32,8 @@ route.get('/productos/:id',(req,res)=>{
 
 route.post('/productos',(req,res)=>{
     try{    
-        console.log(`graba producto`);    
-        let item = objProductos.saveProduct(req.body);
+          
+        let item = Producto.saveProduct(req.body);
         res.json(item);
 
     }catch(err){
@@ -40,7 +43,7 @@ route.post('/productos',(req,res)=>{
 
 route.put('/productos/:id',(req,res)=>{
     try{        
-        let item = objProductos.updateProduct(req.body, req.params.id);
+        let item = Producto.updateProduct(req.body, req.params.id);
         res.json(item);
 
     }catch(err){
@@ -50,7 +53,7 @@ route.put('/productos/:id',(req,res)=>{
 
 route.delete('/productos/:id',(req,res)=>{
     try{        
-        let item = objProductos.deleteProduct(req.params.id);
+        let item = Producto.deleteProduct(req.params.id);
         res.json(item);
 
     }catch(err){
@@ -58,4 +61,6 @@ route.delete('/productos/:id',(req,res)=>{
     }    
 });
 
-module.exports = route;
+
+
+module.exports =  route;

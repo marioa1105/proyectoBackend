@@ -59,4 +59,4 @@ class Producto{
     }
 }
 
-module.exports = Producto;
+module.exports = new Producto();
