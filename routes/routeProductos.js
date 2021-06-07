@@ -34,7 +34,9 @@ route.post('/productos',(req,res)=>{
     try{    
           
         let item = Producto.saveProduct(req.body);
-        res.json(item);
+        res.redirect('../productos/vista');
+        //res.render('../views/producto/productos');
+        //res.json(item);
 
     }catch(err){
         res.status(404).json({error: err.message});
