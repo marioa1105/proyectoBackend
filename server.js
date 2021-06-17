@@ -1,17 +1,18 @@
-const { json } = require('express');
 const express = require('express');
 const Producto = require('./api/producto.js');
-
 const productoRoutes = require('./routes/routeProductos.js');
 const handlebars = require('express-handlebars');
-const route = require('./routes/routeProductos.js');
+
 
 const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 const PORT = 8080;
 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 //Plantillas
 app.engine('hbs',
@@ -24,14 +25,12 @@ app.engine('hbs',
     );
 app.set('view engine', 'hbs');
 app.set('views', './views');
-app.use(express.static(__dirname + '/public'));
 
 //API
 app.use('/api',productoRoutes);
 
 app.get('/productos/vista',(req,res)=>{
-    try{                        
-        console.log(Producto.items);
+    try{                                
         let hayProductos = Producto.items.length == 0 ?false:true;
         res.render("producto/productos", {'hayProductos': hayProductos, 'productos': Producto.items});
     } catch(err){
@@ -45,11 +44,24 @@ app.get('/productos/nuevoProducto',(req,res)=>{
     res.render("producto/addProducto");        
 });
 
-const server = app.listen(PORT, () =>{
+
+app.get('/',(req,res)=>{
+
+});
+
+io.on('connection',(socket) =>{
+    console.log('Usuario conectado')
+    socket.emit('msgProductos',Producto.items);
+    socket.on("updateProd",data=>{
+        io.sockets.emit('msgProductos', Producto.items);
+    })
+});
+
+
+server.listen(PORT, () =>{
     console.log(`Escuchando en puerto http://localhost:${PORT}`);
 });
 
 server.on('error', error => {
     console.log('error en el servidor:', error);
 });
-

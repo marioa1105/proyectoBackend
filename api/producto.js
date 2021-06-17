@@ -15,7 +15,7 @@ class Producto{
         }else{
             id = this.items.length + 1;
         }
-
+        
         item.id = id;
         this.items.push(item);
         return item;

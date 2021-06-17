@@ -7,7 +7,7 @@ route.get('/',(req,res)=>{
 });
 
 
-route.get('/productos',(req,res)=>{
+route.get('/productos/listar',(req,res)=>{
     try{
         
         let items = Producto.getProducts();
@@ -19,7 +19,7 @@ route.get('/productos',(req,res)=>{
     }   
 });
 
-route.get('/productos/:id',(req,res)=>{
+route.get('/productos/listar/:id',(req,res)=>{
     try{
         console.log('getbydi')
         let item = Producto.getProductById(req.params.id);
@@ -30,20 +30,18 @@ route.get('/productos/:id',(req,res)=>{
     }    
 });
 
-route.post('/productos',(req,res)=>{
+route.post('/productos/guardar',(req,res)=>{
     try{    
-          
+        
         let item = Producto.saveProduct(req.body);
-        res.redirect('../productos/vista');
-        //res.render('../views/producto/productos');
-        //res.json(item); 
+        res.json(item); 
 
     }catch(err){
         res.status(404).json({error: err.message});
     }    
 }); 
 
-route.put('/productos/:id',(req,res)=>{
+route.put('/productos/actualizar/:id',(req,res)=>{
     try{        
         let item = Producto.updateProduct(req.body, req.params.id);
         res.json(item);
@@ -53,7 +51,7 @@ route.put('/productos/:id',(req,res)=>{
     }    
 });
 
-route.delete('/productos/:id',(req,res)=>{
+route.delete('/productos/borrar/:id',(req,res)=>{
     try{        
         let item = Producto.deleteProduct(req.params.id);
         res.json(item);
@@ -62,7 +60,5 @@ route.delete('/productos/:id',(req,res)=>{
         res.status(404).json({error: err.message});
     }    
 });
-
-
 
 module.exports =  route;
