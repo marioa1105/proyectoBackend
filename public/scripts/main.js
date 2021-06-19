@@ -1,10 +1,25 @@
 const socket = io.connect();
-
+const btnEnviarMensaje = document.getElementById('btnEnviarMensaje');
+const btnEnviar = document.getElementById('btnEnviar');
 socket.on('msgProductos', data => {    
     llenarTabla(data);
 });
 
-document.getElementById('btnEnviar').addEventListener("click",function(e){
+socket.on('sendMessage', data => {    
+    getMessages(data);
+});
+
+btnEnviarMensaje.addEventListener('click',function(event){
+    let message = {
+        email: document.getElementById('txtEmail').value,
+        date: new Date(),
+        message: document.getElementById('txtMensaje').value
+    };
+    document.getElementById('txtMensaje').value = '';
+    socket.emit('sendMessage', message);
+},false);
+
+btnEnviar.addEventListener("click",function(e){
     e.preventDefault();
     
     const data = { title: document.getElementById('title').value, 
@@ -58,4 +73,33 @@ function llenarTabla(productos){
     let html = template({'hayProductos': hayProductos, 'productos': productos});
     
     document.getElementById('divTblProductos').innerHTML = html;
+}
+
+function getMessages(messages){
+    if (messages.length == 0)
+        return;
+
+    let data = messages.map(x => {
+        return {
+            email: x.email,
+            date: new Date(x.date).toLocaleString(),
+            message: x.message
+        }
+    });
+    let htmlTemplate = 
+    `<ul style="list-style: none">
+        {{#each messages}}
+            <li> 
+                
+                <span style='color:blue'>{{this.email}}</span> 
+                <span style='color:red'>[{{this.date}}]: </span> 
+                <span style='color:green'>{{this.message}}</span> 
+            </li>
+        {{/each}}
+    </ul>`;
+        
+    let template = Handlebars.compile(htmlTemplate);
+    let html = template({'messages': data});
+    console.log(html);
+    document.getElementById('messages').innerHTML = html;
 }

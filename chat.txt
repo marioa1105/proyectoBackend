@@ -1,0 +1,37 @@
+[
+	{
+		"email": "chrome",
+		"date": "2021-06-19T23:46:26.154Z",
+		"message": "hola"
+	},
+	{
+		"email": "edge",
+		"date": "2021-06-19T23:46:41.839Z",
+		"message": "hola"
+	},
+	{
+		"email": "chrome",
+		"date": "2021-06-19T23:46:51.623Z",
+		"message": "como andas?"
+	},
+	{
+		"email": "edge",
+		"date": "2021-06-19T23:46:58.506Z",
+		"message": "bien y vos?"
+	},
+	{
+		"email": "chrome",
+		"date": "2021-06-19T23:47:10.233Z",
+		"message": "ahora joya"
+	},
+	{
+		"email": "edge",
+		"date": "2021-06-19T23:47:16.163Z",
+		"message": "que bueno"
+	},
+	{
+		"email": "edge",
+		"date": "2021-06-19T23:51:47.397Z",
+		"message": "hi"
+	}
+]

@@ -1,7 +1,9 @@
 const express = require('express');
 const Producto = require('./api/producto.js');
+const Chat = require('./api/Chat.js');
 const productoRoutes = require('./routes/routeProductos.js');
 const handlebars = require('express-handlebars');
+const { json } = require('express');
 
 
 const app = express();
@@ -9,7 +11,7 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const PORT = 8080;
 
-
+const chat = new Chat();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -50,11 +52,27 @@ app.get('/',(req,res)=>{
 });
 
 io.on('connection',(socket) =>{
-    console.log('Usuario conectado')
+
+    
     socket.emit('msgProductos',Producto.items);
     socket.on("updateProd",data=>{
         io.sockets.emit('msgProductos', Producto.items);
     })
+
+    
+    chat.getMessages().then(data => {                
+        io.sockets.emit('sendMessage', data);
+    }) 
+
+    socket.on("sendMessage",message => {  
+        
+        chat.addMessage(message).then(() => {            
+            chat.getMessages().then(data => {
+                io.sockets.emit('sendMessage', data);
+            })            
+        }
+        );        
+    });
 });
 
 
