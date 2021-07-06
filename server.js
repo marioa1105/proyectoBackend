@@ -10,6 +10,7 @@ const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const PORT = 8080;
+const productoService = new Producto();
 
 const chat = new Chat();
 app.use(express.json());
@@ -32,9 +33,10 @@ app.set('views', './views');
 app.use('/api',productoRoutes);
 
 app.get('/productos/vista',(req,res)=>{
-    try{                                
-        let hayProductos = Producto.items.length == 0 ?false:true;
-        res.render("producto/productos", {'hayProductos': hayProductos, 'productos': Producto.items});
+    try{                   
+        let items = productoService.getProducts();             
+        let hayProductos = items.length == 0 ?false:true;
+        res.render("producto/productos", {'hayProductos': hayProductos, 'productos': items});
     } catch(err){
         res.render("producto/productos", {'hayProductos': false, 'productos': []});
     }    
@@ -48,17 +50,21 @@ app.get('/productos/nuevoProducto',(req,res)=>{
 
 
 app.get('/',(req,res)=>{
-
+    res.render("producto/addProducto");
 });
 
 io.on('connection',(socket) =>{
 
     
-    socket.emit('msgProductos',Producto.items);
-    socket.on("updateProd",data=>{
-        io.sockets.emit('msgProductos', Producto.items);
+    productoService.getProducts().then(data => {
+        socket.emit('msgProductos',data);
     })
-
+    
+    socket.on("updateProd",data=>{
+        productoService.getProducts().then(data => {
+            io.sockets.emit('msgProductos', data);
+        })        
+    })
     
     chat.getMessages().then(data => {                
         io.sockets.emit('sendMessage', data);

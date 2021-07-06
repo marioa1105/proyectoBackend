@@ -1,62 +1,56 @@
+const ProductoData = require('../data/ProductosData');
 class Producto{     
     constructor(){
         this.title = "";
         this.price = 0;
         this.thumbnail = "";
         this.id = -1;
-        this.items= [];
     } 
     
     saveProduct(item){
-        let id;
-        
-        if (this.items.length == 0){
-            id = 1;
-        }else{
-            id = this.items.length + 1;
-        }
-        
-        item.id = id;
-        this.items.push(item);
+        let Data = new ProductoData();
+        Data.save(item);
         return item;
     }
     getProducts(){
-        if (this.items == 0){
+        let Data = new ProductoData();
+        let items = new Array();
+        items = Data.getAll();
+        if (items == 0){
             throw new Error("No hay productos cargados");
         }
-        return this.items;
+        return items;
     }
     getProductById(id){
-        let obj = this.items.find(x => x.id == id);
+        let Data = new ProductoData();
+        let obj = Data.getById(id);
         if(obj == null || obj == undefined){
             throw new Error("Producto no encontrado");            
         }
         return obj;
     }
-    updateProduct(prod, id){
+    async updateProduct(prod, id){
         try{
-            let index = this.items.findIndex(x => x.id == id);
-            console.log(index);
-            if (index < 0)
-                throw new Error("No se encontro el producto");
+            let Data = new ProductoData();
             prod.id = id;
-            this.items.splice(index,1,prod);
-            return this.items;
+            await Data.update(prod);
+            
+            return this.getProducts();
         }catch(error){
             throw error;
         }
     }
-    deleteProduct(id){
+    async deleteProduct(id){
         try{
-            let index = this.items.findIndex(x => x.id == id);
-            if (index < 0)
-                throw new Error("No se encontro el producto");
-            this.items.splice(index,1);
-            return this.items;
+            let Data = new ProductoData();
+            await Data.delete(id);
+            return this.getProducts();
         }catch(error){
             throw error;
         }
     }
 }
 
-module.exports = new Producto();
+module.exports = Producto;
+
+
