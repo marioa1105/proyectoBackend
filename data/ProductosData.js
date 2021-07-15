@@ -1,10 +1,17 @@
 const Producto = require('../api/producto');
-const {mySqlConfig} = require('./config');
-const knex = require('knex')(mySqlConfig);
+const mongoose = require('mongoose');
+const Model = require('../model/Productos');
+const {mongo} = require('./config');
+/*const {mySqlConfig} = require('./config');
+const knex = require('knex')(mySqlConfig);*/
 
 class ProductoData{
     constructor(){
-        knex.schema.hasTable('productos').then(existsTable =>{
+        mongoose.connect(mongo, { useNewUrlParser: true, useUnifiedTopology: true })
+            .then(()=> {
+                console.log('Conexion exitosa');
+            });
+        /*knex.schema.hasTable('productos').then(existsTable =>{
             if (!existsTable){
                 knex.schema.createTable('productos', function(table) {
                     table.increments('id');
@@ -21,7 +28,7 @@ class ProductoData{
                     //knex.destroy();
                 });
             } 
-        });
+        });*/
     }
     async getObjectByRow(row){
         let producto = {
@@ -33,8 +40,9 @@ class ProductoData{
         return producto;
     }
     async save(producto){
-        try{
-            await knex('productos').insert(producto);
+        try{                        
+            await Model.create(producto);
+            /*await knex('productos').insert(producto);*/
             return true;
         }
         catch(err){
@@ -44,11 +52,12 @@ class ProductoData{
     async getAll(){
         let lista = new Array();
         try{
-            let rows = await knex('productos').select('*');            
+            lista = await Model.find({});
+            /*let rows = await knex('productos').select('*');            
             for (let row of rows) {     
                 let item = await this.getObjectByRow(row)           
                 lista.push(item);
-            }
+            }*/
             return lista;
         }
         catch(err){
@@ -57,8 +66,9 @@ class ProductoData{
     }
     async getById(id){
         try{
-            let row  = await knex('productos').where('id', id);
-            let producto = this.getObjectByRow(row[0]);
+            let producto = Model.find({_id: id});
+            /*let row  = await knex('productos').where('id', id);
+            let producto = this.getObjectByRow(row[0]);*/
             return producto;
         }
         catch(err){
@@ -67,11 +77,15 @@ class ProductoData{
     }
     async update(producto){
         try{
-            await knex('productos').where('id',producto.id).update({
+            await Model.updateOne({_id:producto.id},
+                                    {title: producto.title,
+                                    price: producto.price,
+                                    thumbnail: producto.thumbnail});
+            /*await knex('productos').where('id',producto.id).update({
                 title: producto.title,
                 price: producto.price,
                 thumbnail: producto.thumbnail
-            });
+            });*/
         }
         catch(err){
             throw new Error(`Error al actualizar el producto: ${err.message}`);
@@ -79,7 +93,8 @@ class ProductoData{
     }
     async delete(id){
         try{
-            await knex('productos').where('id',id).del();
+            await Model.deleteOne({_id: id});
+            //await knex('productos').where('id',id).del();
         }
         catch(err){
             throw new Error(`Error al actualizar el producto: ${err.message}`);

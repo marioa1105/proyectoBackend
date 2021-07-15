@@ -17,4 +17,7 @@ const sqlite3 = {
     useNullAsDefault: true
 }
 
-module.exports = { mySqlConfig: mysql, sqlite3Config: sqlite3 };
+module.exports = { mySqlConfig: mysql, 
+                    sqlite3Config: sqlite3,
+                    mongo: "mongodb://localhost:27017/ecommerce"
+                 };
