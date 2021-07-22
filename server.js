@@ -4,8 +4,8 @@ const Chat = require('./api/Chat.js');
 const productoRoutes = require('./routes/routeProductos.js');
 const handlebars = require('express-handlebars');
 const { json } = require('express');
-
-
+const faker = require('faker');
+faker.locale = "es";
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
@@ -42,6 +42,25 @@ app.get('/productos/vista',(req,res)=>{
     }    
 });
 
+//DESAFIO 22
+app.get('/productos/vista_test',(req,res)=>{
+    try{                   
+        let cant = req.query.cant == undefined? 5:req.query.cant;
+        let items = new Array();
+        for (let index = 0; index < cant -1; index++) {
+            let producto = new Producto();
+            
+            producto.title = faker.commerce.productName();
+            producto.price = faker.commerce.price();
+            producto.thumbnail = faker.random.image();
+            items.push(producto);
+        }
+        let hayProductos = items.length == 0 ?false:true;
+        res.render("producto/productos", {'hayProductos': hayProductos, 'productos': items});
+    } catch(err){
+        res.render("producto/productos", {'hayProductos': false, 'productos': []});
+    }    
+});
 
 app.get('/productos/nuevoProducto',(req,res)=>{  
     
