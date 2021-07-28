@@ -6,7 +6,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <title>Formulario de Ingreso de Productos</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    
+    <script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js"></script>
 </head>
 <body>    
         <div class="container mt-3">
@@ -46,11 +46,52 @@
                         <div class="col-sm"></div>
                         <div class="col-sm"></div>
                     </div>
-                    
-                    
-                        
-                    <div id="messages"></div>
-                    
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <input class="form-control" id="txtNombre" placeholder="Ingresá tu nombre...">
+                            </div>
+                        </div>
+                        <div class="col-sm"></div>
+                        <div class="col-sm"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <input class="form-control" id="txtApellido" placeholder="Ingresá tu apellido...">
+                            </div>
+                        </div>
+                        <div class="col-sm"></div>
+                        <div class="col-sm"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <input class="form-control" id="txtEdad" placeholder="Ingresá tu edad...">
+                            </div>
+                        </div>
+                        <div class="col-sm"></div>
+                        <div class="col-sm"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <input class="form-control" id="txtAlias" placeholder="Ingresá tu Alias...">
+                            </div>
+                        </div>
+                        <div class="col-sm"></div>
+                        <div class="col-sm"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <input class="form-control" id="txtAvatar" >
+                            </div>
+                        </div>
+                        <div class="col-sm"></div>
+                        <div class="col-sm"></div>
+                    </div>
+
                     
                     <div class="row">
                         <div class="col-sm">
@@ -59,7 +100,8 @@
                         <div class="col-sm">
                             <button class="btn btn-primary" id="btnEnviarMensaje">Enviar!</button>
                         </div>
-                    </div>                                                                                                    
+                    </div>     
+                    <div id="messages"></div>                                                                                               
             </div>
         </div>
         

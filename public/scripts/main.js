@@ -1,6 +1,7 @@
 const socket = io.connect();
 const btnEnviarMensaje = document.getElementById('btnEnviarMensaje');
 const btnEnviar = document.getElementById('btnEnviar');
+
 socket.on('msgProductos', data => {    
     llenarTabla(data);
 });
@@ -11,9 +12,16 @@ socket.on('sendMessage', data => {
 
 btnEnviarMensaje.addEventListener('click',function(event){
     let message = {
-        email: document.getElementById('txtEmail').value,
-        date: new Date(),
-        message: document.getElementById('txtMensaje').value
+        author: {
+            id:document.getElementById('txtEmail').value,
+            nombre: document.getElementById('txtNombre').value,
+            apellido: document.getElementById('txtApellido').value,
+            edad: document.getElementById('txtEdad').value,
+            alias:document.getElementById('txtAlias').value,
+            avatar:document.getElementById('txtAvatar').value,            
+            date: new Date()
+        } ,        
+        text: document.getElementById('txtMensaje').value
     };
     document.getElementById('txtMensaje').value = '';
     socket.emit('sendMessage', message);
@@ -76,14 +84,26 @@ function llenarTabla(productos){
 }
 
 function getMessages(messages){
-    if (messages.length == 0)
+    
+    const schemaAuthor = new normalizr.schema.Entity('author',{},{idAttribute: 'email'});
+    const schemaMessage = new normalizr.schema.Entity('message', 
+                        {
+                            author: schemaAuthor
+                        });
+
+    const messagesNorm = new normalizr.schema.Entity('messages', {
+        message: [schemaMessage]
+    });
+    const desnormalizado = normalizr.denormalize(messages.result, messagesNorm, messages.entities);
+    if (desnormalizado.messages.length == 0)
         return;
 
-    let data = messages.map(x => {
+    let data = desnormalizado.messages.map(x => {
         return {
-            email: x.email,
+            id: x.author.id,
             date: new Date(x.date).toLocaleString(),
-            message: x.message
+            text: x.text,
+            avatar: x.author.avatar
         }
     });
     let htmlTemplate = 
@@ -91,9 +111,10 @@ function getMessages(messages){
         {{#each messages}}
             <li> 
                 
-                <span style='color:blue'>{{this.email}}</span> 
+                <span style='color:blue'>{{this.id}}</span> 
                 <span style='color:red'>[{{this.date}}]: </span> 
-                <span style='color:green'>{{this.message}}</span> 
+                <span style='color:green'>{{this.text}}</span> 
+                <span><img width="50" src={{this.avatar}} alt="not found"> </span>
             </li>
         {{/each}}
     </ul>`;
