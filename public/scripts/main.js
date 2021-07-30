@@ -10,6 +10,8 @@ socket.on('sendMessage', data => {
     getMessages(data);
 });
 
+
+
 btnEnviarMensaje.addEventListener('click',function(event){
     let message = {
         author: {
@@ -26,6 +28,8 @@ btnEnviarMensaje.addEventListener('click',function(event){
     document.getElementById('txtMensaje').value = '';
     socket.emit('sendMessage', message);
 },false);
+
+
 
 btnEnviar.addEventListener("click",function(e){
     e.preventDefault();

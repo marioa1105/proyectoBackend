@@ -13,9 +13,23 @@ const PORT = 8080;
 const productoService = new Producto();
 
 const chat = new Chat();
+
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const { use } = require('./routes/routeProductos.js');
+app.use(cookieParser());
+app.use(session({
+    secret: 'secreto',
+    maxAge: 10 * 1000,    
+    resave: true,
+    saveUninitialized:true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
+
+
 
 //Plantillas
 app.engine('hbs',
@@ -32,15 +46,52 @@ app.set('views', './views');
 //API
 app.use('/api',productoRoutes);
 
-app.get('/productos/vista',(req,res)=>{
+const auth = function(req,res,next){
+    
+    if(req.session.userName){
+        return next();
+    }else{
+        res.render('login');
+    }
+}
+app.post('/logon',(req,res)=>{
+    let { userName } = req.body;
+    req.session.userName = userName;  
+    res.json({login : true});
+});
+app.get('/login',auth,(req,res)=>{
+    res.render('login');
+})
+app.get('/logout',auth,(req,res)=>{
+    let user = req.session.userName;
+    
+    req.session.destroy();
+    res.render('logout',{'userName': user});
+    
+
+    //req.session.userName = undefined;
+    
+})
+
+app.get('/productos/vista',async (req,res)=>{
     try{                   
-        let items = productoService.getProducts();             
+        let items = await productoService.getProducts();             
         let hayProductos = items.length == 0 ?false:true;
-        res.render("producto/productos", {'hayProductos': hayProductos, 'productos': items});
+        res.render("producto/productos", {'hayProductos': hayProductos, 'productos': items, 'userName': req.session.userName});
     } catch(err){
         res.render("producto/productos", {'hayProductos': false, 'productos': []});
     }    
 });
+app.get('/productos/addProducto',async (req,res)=>{
+    try{                   
+        let items = await productoService.getProducts();             
+        let hayProductos = items.length == 0 ?false:true;
+        res.render("producto/addProducto", { 'userName': req.session.userName});
+    } catch(err){
+        res.render("producto/addProducto", {'hayProductos': false, 'productos': []});
+    }    
+});
+
 
 //DESAFIO 22
 app.get('/productos/vista_test',(req,res)=>{
@@ -56,20 +107,21 @@ app.get('/productos/vista_test',(req,res)=>{
             items.push(producto);
         }
         let hayProductos = items.length == 0 ?false:true;
-        res.render("producto/productos", {'hayProductos': hayProductos, 'productos': items});
+        res.render("producto/productos", {'hayProductos': hayProductos, 'productos': items, 'userName': req.session.userName});
     } catch(err){
         res.render("producto/productos", {'hayProductos': false, 'productos': []});
     }    
 });
-
+/*
 app.get('/productos/nuevoProducto',(req,res)=>{  
     
     res.render("producto/addProducto");        
-});
+});*/
 
 
-app.get('/',(req,res)=>{
-    res.render("producto/addProducto");
+app.get('/',auth,(req,res)=>{
+    //res.render('index');
+    res.redirect("/productos/addProducto");
 });
 
 io.on('connection',(socket) =>{
@@ -108,3 +160,4 @@ server.listen(PORT, () =>{
 server.on('error', error => {
     console.log('error en el servidor:', error);
 });
+

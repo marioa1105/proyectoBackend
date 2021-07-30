@@ -1,24 +1,111 @@
 <div class="jumbotron">
-    <h2>Ingrese Producto</h2>
-
-    <form action="/api/productos" method="POST">
-        
-        <div class="form-group">
-            <label class="font-weight-bold font-italic" for="nombre">Nombre:</label>
-            <input class="form-control" type="text" name="title">
+    <form action="/logout" method="GET">
+        <div class="row">
+            <div class="col-sm">
+                <h1 class="text-success">Bienvenido {{userName}}</h1>
+            </div>
+            <div class="col-sm"></div>            
+            <div class="col-sm">
+                <button class="btn btn-warning" id="btnLogout">Desloguear</button>
+            </div>
         </div>
-        <div class="form-group">
-            <label class="font-weight-bold font-italic" for="precio">Precio:</label>
-            <input class="form-control" type="text" name="price">
-        </div>
-        <div class="form-group">
-            <label class="font-weight-bold font-italic" for="foto">Foto URL:</label>
-            <input class="form-control" type="text" name="thumbnail">
-        </div> 
-        
-        <button class="btn btn-success" id="btnEnviar">Enviar</button>
     </form>
-    
+</div>
+<div class="container mt-3">
+    <div class="jumbotron">
+        <h1>Ingrese Producto</h1>
+        <br>
+        <form>
+
+            <div class="form-group">
+                <label class="font-weight-bold font-italic" for="nombre">Nombre:</label>
+                <input id="title" class="form-control" type="text" name="title">
+            </div>
+            <div class="form-group">
+                <label class="font-weight-bold font-italic" for="precio">Precio:</label>
+                <input id="price" class="form-control" type="text" name="price">
+            </div>
+            <div class="form-group">
+                <label class="font-weight-bold font-italic" for="foto">Foto URL:</label>
+                <input id="thumbnail" class="form-control" type="text" name="thumbnail">
+            </div>
+
+            <button class="btn btn-success" id="btnEnviar">Enviar</button>
+        </form>
+        <hr>
+        <br>
+        <div id="divTblProductos"></div>
+
+    </div>
+    <div class="jumbotron">
+        <h1>Centro de mensajes</h1>
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <input class="form-control" id="txtEmail" placeholder="Ingresá tu correo...">
+                </div>
+            </div>
+            <div class="col-sm"></div>
+            <div class="col-sm"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <input class="form-control" id="txtNombre" placeholder="Ingresá tu nombre...">
+                </div>
+            </div>
+            <div class="col-sm"></div>
+            <div class="col-sm"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <input class="form-control" id="txtApellido" placeholder="Ingresá tu apellido...">
+                </div>
+            </div>
+            <div class="col-sm"></div>
+            <div class="col-sm"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <input class="form-control" id="txtEdad" placeholder="Ingresá tu edad...">
+                </div>
+            </div>
+            <div class="col-sm"></div>
+            <div class="col-sm"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <input class="form-control" id="txtAlias" placeholder="Ingresá tu Alias...">
+                </div>
+            </div>
+            <div class="col-sm"></div>
+            <div class="col-sm"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <input class="form-control" id="txtAvatar">
+                </div>
+            </div>
+            <div class="col-sm"></div>
+            <div class="col-sm"></div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm">
+                <input class="form-control" type="text" id="txtMensaje" placeholder="Ingresá un mensaje...">
+            </div>
+            <div class="col-sm">
+                <button class="btn btn-primary" id="btnEnviarMensaje">Enviar!</button>
+            </div>
+        </div>
+        <div id="messages"></div>
+    </div>
 </div>
 
-    
+<script src="/scripts/handlebars.js"></script>
+<script src="/scripts/main.js"></script>
