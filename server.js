@@ -17,12 +17,25 @@ const chat = new Chat();
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const { use } = require('./routes/routeProductos.js');
+
+const FileStore = require('session-file-store')(session);
+const MongoStore = require('connect-mongo');
+const advancedOptions = {useNewUrlParser:true, useUnifiedToplogy:true};
+
+
 app.use(cookieParser());
 app.use(session({
-    secret: 'secreto',
-    maxAge: 10 * 1000,    
-    resave: true,
-    saveUninitialized:true
+    store: MongoStore.create({
+        mongoUrl: "mongodb://mario:mario@cluster0-shard-00-00.4jorw.mongodb.net:27017,cluster0-shard-00-01.4jorw.mongodb.net:27017,cluster0-shard-00-02.4jorw.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-jm0y3k-shard-0&authSource=admin&retryWrites=true&w=majority",
+        //"mongodb://localhost:27017/sessiones",
+        
+        mongoOptions: advancedOptions,
+        ttl: 10000
+    }),            //new FileStore({path:'./sesiones',ttl:300, retries:0}),
+    secret: 'secreto',    
+    resave: false,
+    saveUninitialized:false
+    
 }));
 
 app.use(express.json());
