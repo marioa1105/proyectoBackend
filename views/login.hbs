@@ -1,42 +1,62 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 </head>
-<body>    
-        <div class="container mt-3">
-            <div class="jumbotron">
-                <h1>Login</h1>                                                                              
-                <div class="row">
-                    <div class="col-sm">
-                        <label for="login">Ingrese su nombre</label>
-                    </div>
-                </div>
-                
-                <div class="row">
+
+<body>
+    <div class="container mt-3">
+        <div class="jumbotron">
+            <h1>Login de Usuario</h1>
+            <div class="row">
                 <div class="col-sm">
-                    <input class="form-control" type="text" id="txtLogin">
+                    <label for="login">Usuario</label>
                 </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm">
-                        <br>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm">
-                        <button class="btn btn-success" id="btnLogin" value="Enviar">Enviar</submit>
-                    </div>
-                </div>
-                
-                
             </div>
+
+            <div class="row">
+                <div class="col-sm">
+                    <input class="form-control" type="text" id="txtUsername">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <label for="login">Contraseña</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <input class="form-control" type="password" id="txtPassword">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <button class="btn btn-success" id="btnLogin" value="Enviar">Login</submit>
+                </div>
+            </div>
+            
+            <hr/>
+            <div class="row">
+                <div class="col-sm">
+                    <button class="btn btn-success" id="btnRegistrar" value="Enviar">Registrarse</submit>
+                </div>
+            </div>
+
         </div>
-        
-        
-        <script src="/scripts/login.js"></script>    
-    </body>
+    </div>
+
+
+    <script src="/scripts/login.js"></script>
+</body>
+
 </html>

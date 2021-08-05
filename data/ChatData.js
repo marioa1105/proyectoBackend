@@ -9,26 +9,8 @@ class ChatData{
     constructor(){
         mongoose.connect(mongo, { useNewUrlParser: true, useUnifiedTopology: true })
             .then(()=> {
-                console.log('Conexion exitosa');
-            });
-        /*knex.schema.hasTable('chat').then(existsTable =>{
-            if (!existsTable){
-                knex.schema.createTable('chat', function(table) {
-                    table.increments('id');
-                    table.string('email',150).notNullable();
-                    table.datetime('date');
-                    table.string('message');
-                }).then(() => {
-                    console.log('tabla chat creada!');
-                }).catch(error => {
-                    console.log('error:', error);
-                    throw error;
-                }).finally(() => {
-                    //console.log('cerrando conexion...');
-                    //knex.destroy();
-                });
-            } 
-        });*/
+                console.log('Conexion exitosa chat');
+            });        
     }
 
     async save(chat){
