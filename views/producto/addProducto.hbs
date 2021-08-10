@@ -1,14 +1,36 @@
 <div class="jumbotron">
     <form action="/logout" method="GET">
-        <div class="row">
-            <div class="col-sm">
-                <h1 class="text-success">Bienvenido {{userName}}</h1>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <span><img width="50" src={{photo}} alt="not found"> </span>
+                </div>
             </div>
-            <div class="col-sm"></div>            
-            <div class="col-sm">
-                <button class="btn btn-warning" id="btnLogout">Desloguear</button>
+            <div class="row">
+                <div class="col">
+                    <h1 class="text-success">Bienvenido</h1> <br>
+                </div>
+                <div class="col"></div>
+                <div class="col">
+                    <button class="btn btn-warning" id="btnLogout">Desloguear</button>
+                </div>
             </div>
+            <div class="row">
+                <div class="col">
+                    <h6 class="text-success">{{userName}}</h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h6 class="text-success">{{email}}</h6>
+                </div>
+            </div>
+            
         </div>
+
+
+
+
     </form>
 </div>
 <div class="container mt-3">

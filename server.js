@@ -24,7 +24,28 @@ const advancedOptions = {useNewUrlParser:true, useUnifiedToplogy:true};
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 const usuarioService = require('./data/UsuariosData');
+
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const FACEBOOK_CLIENT_ID = process.env.FACEBOOK_CLIENT_ID;
+const FACEBOOK_CLIENT_SECRET = process.env.FACEBOOK_KEY;
+
+passport.use(new FacebookStrategy({
+    clientID: FACEBOOK_CLIENT_ID,
+    clientSecret: FACEBOOK_CLIENT_SECRET,
+    callbackURL:'/facebook/callback',
+    profileFields: ['id', 'displayName', 'photos', 'emails'],
+    scope: ['email']
+    },function (accessToken, refreshToken, profile, done) {        
+        let userProfile = profile;
+        return done(null, userProfile);
+    })
+);
+/*
 passport.use('login', new LocalStrategy({
     passReqToCallback: true
 },
@@ -62,7 +83,7 @@ passport.use('signup', new LocalStrategy({
         return done(null, newUser);
     }
 })
-);
+);*/
 
 const isValidPassword = (user, password) => {    
     return bcrypt.compareSync(password,user.Password);
@@ -72,12 +93,14 @@ const createHash = (password) => {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
 }
 passport.serializeUser(function (user, done) {
-    done(null, user.UserName);
+    //done(null, user.UserName);
+    done(null, user);
 });
 
 passport.deserializeUser(async function (id, done) {
-    let user = await usuarioService.getUsuario(id);
-    return done(null, user);
+    done(null, id);
+    /*let user = await usuarioService.getUsuario(id);
+    return done(null, user);*/
 });
 
 app.use(cookieParser());
@@ -123,19 +146,26 @@ const auth = function(req,res,next){
     if(req.isAuthenticated()){
         return next();
     }else{
-        res.render('login');
+        res.redirect('/logon');
     }
 }
 
-app.post('/login', passport.authenticate('login', { failureRedirect: '/faillogin' }),(req,res)=>{
+app.get('/login', passport.authenticate('facebook'));
+app.get('/facebook/callback', passport.authenticate('facebook',
+    {
+        successRedirect: '/',
+        failureRedirect: '/faillogin'
+    }
+));
+/*app.post('/login', passport.authenticate('login', { failureRedirect: '/faillogin' }),(req,res)=>{
     let { userName } = req.body;
     req.session.userName = userName;  
     res.redirect('/');
     //res.json({login : true});
-});
-app.get('/login', (req, res) => {
+});*/
+/*app.get('/login', (req, res) => {
     res.render('login');
-});
+});*/
 app.get('/signup',(req,res)=>{
     res.render('signup');
 });
@@ -152,10 +182,19 @@ app.get('/faillogin', (req, res) => {
     res.status(400).render('faillogin');
 });
 
+app.get('/logon',(req,res)=>{
+    res.render('logon');
+});
+
 app.get('/logout',auth,(req,res)=>{
-    let user = req.user.UserName;
-    req.logout();
-    res.render('logout',{'userName':  user});        
+    req.session.destroy((err) => {
+        if(err) return next(err)
+    
+        let user = req.user.displayName;
+        req.logout();
+        res.render('logout',{'userName':  user}); 
+    })
+           
 })
 
 app.get('/productos/vista',async (req,res)=>{
@@ -171,7 +210,9 @@ app.get('/productos/addProducto',async (req,res)=>{
     try{                   
         let items = await productoService.getProducts();             
         let hayProductos = items.length == 0 ?false:true;
-        res.render("producto/addProducto", { 'userName': req.user.UserName});
+        let email = req.user.emails.length == 0? "": req.user.emails[0].value;
+        let photo = req.user.photos.length == 0? "": req.user.photos[0].value;
+        res.render("producto/addProducto", { 'userName': req.user.displayName, 'email':email, 'photo': photo });
     } catch(err){
         res.render("producto/addProducto", {'hayProductos': false, 'productos': []});
     }    
