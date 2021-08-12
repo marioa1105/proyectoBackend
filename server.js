@@ -9,9 +9,9 @@ faker.locale = "es";
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
-const PORT = 8080;
+let PORT = 8080;
 const productoService = new Producto();
-
+const {fork} = require('child_process');
 const chat = new Chat();
 
 const cookieParser = require('cookie-parser');
@@ -28,11 +28,39 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const usuarioService = require('./data/UsuariosData');
 
 const dotenv = require('dotenv');
+const { platform } = require('os');
 
+
+
+let infoProcess = {}; 
 dotenv.config();
 
-const FACEBOOK_CLIENT_ID = process.env.FACEBOOK_CLIENT_ID;
-const FACEBOOK_CLIENT_SECRET = process.env.FACEBOOK_KEY;
+let FACEBOOK_CLIENT_ID = process.env.FACEBOOK_CLIENT_ID;
+let FACEBOOK_CLIENT_SECRET = process.env.FACEBOOK_KEY;
+
+(function(){
+    
+    if (process.argv.length >= 3){
+        
+        PORT = process.argv[2];
+        if (process.argv[3] != undefined && process.argv[4] != undefined){
+            FACEBOOK_CLIENT_ID = process.argv[3] ;
+            FACEBOOK_CLIENT_SECRET = process.argv[4] ;
+        }
+    }
+
+    infoProcess = {
+        ParamsIn: process.argv.map(x => { return x;}),
+        SO: process.platform,
+        NODEV: process.version,
+        Memory: process.memoryUsage(),
+        PathExec: process.execPath,
+        Id: process.pid,
+        Path: process.cwd()
+    };
+        
+    
+})();
 
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_CLIENT_ID,
@@ -149,7 +177,10 @@ const auth = function(req,res,next){
         res.redirect('/logon');
     }
 }
-
+app.get('/info', auth,(req,res)=>{
+    res.render('info', {info: infoProcess});
+    //res.send(JSON.stringify(infoProcess,null,'\t'));
+})
 app.get('/login', passport.authenticate('facebook'));
 app.get('/facebook/callback', passport.authenticate('facebook',
     {
@@ -244,6 +275,17 @@ app.get('/productos/nuevoProducto',(req,res)=>{
     res.render("producto/addProducto");        
 });*/
 
+app.get('/random',(req,res)=>{
+    let cant = req.query.cant || 100000000;
+    console.log(cant);
+    const random = fork('./random.js');
+    random.send(cant);
+    random.on('message', numeros =>{
+        
+        
+        res.json(numeros);
+    })  
+})
 
 app.get('/',auth,(req,res)=>{
     //res.render('index');
@@ -277,6 +319,8 @@ io.on('connection',(socket) =>{
         );        
     });
 });
+
+
 
 
 server.listen(PORT, () =>{

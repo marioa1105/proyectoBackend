@@ -1,0 +1,118 @@
+<div id="accordion">
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#params" aria-expanded="true"
+                    aria-controls="collapseOne">
+                    Argumentos de entrada
+                </button>
+            </h5>
+        </div>
+
+        <div id="params" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                {{#each info.ParamsIn}}
+                <ul>
+                    <li>{{this}}</td>                    
+                </ul>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingTwo">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#plataforma"
+                    aria-expanded="false" aria-controls="collapseTwo">
+                    Plataforma
+                </button>
+            </h5>
+        </div>
+        <div id="plataforma" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body">
+                {{info.SO}}
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#nodeV" aria-expanded="false"
+                    aria-controls="collapseThree">
+                    Node Version
+                </button>
+            </h5>
+        </div>
+        <div id="nodeV" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+                {{info.NODEV}}
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#memory"
+                    aria-expanded="false" aria-controls="collapseThree">
+                    Uso de memoria
+                </button>
+            </h5>
+        </div>
+        <div id="memory" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+                <ul>
+                    <li>rss: {{info.Memory.rss}} </li>
+                    <li>heapTotal: {{info.Memory.heapTotal}}</li>
+                    <li>heapUsed: {{info.Memory.heapUsed}}</li>
+                    <li>external: {{info.Memory.external}}</li>
+                    <li>arrayBuffers: {{info.Memory.arrayBuffers}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#pathExec"
+                    aria-expanded="false" aria-controls="collapseThree">
+                    Path Ejecucion
+                </button>
+            </h5>
+        </div>
+        <div id="pathExec" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+                {{info.PathExec}}
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#processId"
+                    aria-expanded="false" aria-controls="collapseThree">
+                    Process Id
+                </button>
+            </h5>
+        </div>
+        <div id="processId" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+                {{info.Id}}
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#path" aria-expanded="false"
+                    aria-controls="collapseThree">
+                    Carpeta Corriente
+                </button>
+            </h5>
+        </div>
+        <div id="path" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+                {{info.Path}}
+            </div>
+        </div>
+    </div>
+</div>
