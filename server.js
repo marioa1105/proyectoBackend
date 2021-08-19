@@ -44,14 +44,17 @@ let FACEBOOK_CLIENT_SECRET = process.env.FACEBOOK_KEY;
     if (process.argv.length >= 3) {        
 
         PORT = process.argv[2];
+
         if (process.argv[3] != undefined && process.argv[4] != undefined) {
             FACEBOOK_CLIENT_ID = process.argv[3];
             FACEBOOK_CLIENT_SECRET = process.argv[4];
         }
-
-        if (process.argv[5].toUpperCase() == 'FORK' || process.argv[5].toUpperCase() == 'CLUSTER') {
-            MODO = process.argv[5].toUpperCase();
+        if (process.argv[5] != undefined){
+            if (process.argv[5].toUpperCase() == 'FORK' || process.argv[5].toUpperCase() == 'CLUSTER') {
+                MODO = process.argv[5].toUpperCase();
+            }
         }
+        
     }
 
     infoProcess = {
@@ -63,6 +66,7 @@ let FACEBOOK_CLIENT_SECRET = process.env.FACEBOOK_KEY;
         Id: process.pid,
         Path: process.cwd(),
         CantCPU: numCpus
+        , Puerto: PORT 
     };
 
 
@@ -196,8 +200,8 @@ else {
             res.redirect('/logon');
         }
     }
-    app.get('/info', auth, (req, res) => {
-        res.render('info', { info: infoProcess });
+    app.get('/info', (req, res) => {
+        res.render('info', { info: infoProcess});
         //res.send(JSON.stringify(infoProcess,null,'\t'));
     })
     app.get('/login', passport.authenticate('facebook'));
@@ -300,7 +304,7 @@ else {
         const random = fork('./random.js');
         random.send(cant);
         random.on('message', numeros => {
-            res.json(numeros);
+            res.json({ Numeros: numeros, Puerto: PORT } );
         })
 
 

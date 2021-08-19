@@ -1,4 +1,21 @@
+
 <div id="accordion">
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#puerto" aria-expanded="true"
+                    aria-controls="collapseOne">
+                    Puerto
+                </button>
+            </h5>
+        </div>
+
+        <div id="puerto" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                {{info.Puerto}}                
+            </div>
+        </div>
+    </div>
     <div class="card">
         <div class="card-header" id="headingOne">
             <h5 class="mb-0">
