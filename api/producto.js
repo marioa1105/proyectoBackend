@@ -1,33 +1,72 @@
 const ProductoData = require('../data/ProductosData');
+const log4js = require("log4js");
+const config = require('../helpers/Logger');
+log4js.configure(config);
 class Producto{     
     constructor(){
         this.title = "";
         this.price = 0;
         this.thumbnail = "";
         this.id = -1;
+        this.consolaInfo= log4js.getLogger('consolaInfo');
+        this.fileErr = log4js.getLogger('fileErr');
+        this.fileWarn = log4js.getLogger('fileWarn');
     } 
     
     saveProduct(item){
-        let Data = new ProductoData();
-        Data.save(item);
-        return item;
+        try{                        
+            this.consolaInfo.info('agregando producto');
+            let Data = new ProductoData();
+            
+            Data.save(item);
+            this.consolaInfo.info('producto guardado');
+            return item;
+        }
+        catch(err){
+            this.consolaInfo.error('Error al grabar producto ' + err.message);
+            this.fileErr.error('Error al grabar producto ' + err.message);
+            this.fileWarn.warn('Error al grabar producto ' + err.message);
+            throw Error(`Error al grabar producto`);
+        }
+        
     }
     getProducts(){
-        let Data = new ProductoData();
-        let items = new Array();
-        items = Data.getAll();
-        if (items == 0){
-            throw new Error("No hay productos cargados");
+        try{
+            let Data = new ProductoData();
+            let items = new Array();
+            this.consolaInfo.info('Valida productos existentes');
+            items = Data.getAll();
+            if (items == 0){
+                this.fileWarn.warn('No hay productos cargados')
+                throw new Error("No hay productos cargados");
+            }
+            return items;
         }
-        return items;
+        catch(err){
+            this.consolaInfo.error('Error al recuperar productos ' + err.message);
+            this.fileErr.error('Error al recuperar productos '  + err.message);
+            this.fileWarn.warn('Error al recuperar productos '  + err.message);
+            throw Error(err.message);
+        }
     }
-    getProductById(id){
-        let Data = new ProductoData();
-        let obj = Data.getById(id);
-        if(obj == null || obj == undefined){
-            throw new Error("Producto no encontrado");            
+    async getProductById(id){
+        try{
+            let Data = new ProductoData();
+            let obj = await Data.getById(id);
+            this.consolaInfo.info('Valida si existe el producto');
+            if(obj.length == 0){
+                
+                throw new Error("Producto no encontrado");            
+            }
+            return obj[0];
         }
-        return obj;
+        catch(err){
+            this.consolaInfo.error('Error al recuperar el producto ' + err.message);
+            this.fileErr.error('Error al recuperar el producto '  + err.message);
+            this.fileWarn.warn('Error al recuperar el producto '  + err.message);
+            throw Error(err.message);
+        }
+        
     }
     async updateProduct(prod, id){
         try{

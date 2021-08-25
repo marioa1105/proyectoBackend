@@ -22,7 +22,9 @@ route.get('/productos/listar',(req,res)=>{
 route.get('/productos/listar/:id',(req,res)=>{
     try{
         
-        serviceProducto.getProductById(req.params.id).then(item => {res.json(item);});
+        serviceProducto.getProductById(req.params.id)
+            .then(item => {res.json(item);})
+            .catch(err => {res.status(404).json({error: err.message})} );
         
 
     }catch(err){

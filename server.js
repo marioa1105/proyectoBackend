@@ -7,6 +7,7 @@ const { json } = require('express');
 const faker = require('faker');
 faker.locale = "es";
 const app = express();
+const compression = require('compression');
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 let PORT = 8080;
@@ -175,7 +176,7 @@ else {
     app.use(express.static(__dirname + '/public'));
     app.use(passport.initialize());
     app.use(passport.session());
-
+    app.use(compression());
 
     //Plantillas
     app.engine('hbs',
