@@ -4,13 +4,14 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node benchmark.js",
     "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/compression": "^1.7.1",
+    "autocannon": "^7.4.0",
     "bcrypt": "^5.0.1",
     "compression": "^1.7.4",
     "connect-mongo": "^4.4.1",

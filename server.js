@@ -39,7 +39,7 @@ dotenv.config();
 
 let FACEBOOK_CLIENT_ID = process.env.FACEBOOK_CLIENT_ID;
 let FACEBOOK_CLIENT_SECRET = process.env.FACEBOOK_KEY;
-
+PORT = process.env.PORT;
 (function () {
 
     if (process.argv.length >= 3) {        
@@ -201,7 +201,13 @@ else {
             res.redirect('/logon');
         }
     }
+    app.get('/info-debug', (req, res) => {
+        console.log('debug info')
+        res.render('info', { info: infoProcess});
+        //res.send(JSON.stringify(infoProcess,null,'\t'));
+    })
     app.get('/info', (req, res) => {
+        
         res.render('info', { info: infoProcess});
         //res.send(JSON.stringify(infoProcess,null,'\t'));
     })
