@@ -1,6 +1,6 @@
 const express = require('express');
 const Producto = require('./api/producto.js');
-const Chat = require('./api/Chat.js');
+const Chat = require('./api/chat.js');
 const productoRoutes = require('./routes/routeProductos.js');
 const handlebars = require('express-handlebars');
 const { json } = require('express');
