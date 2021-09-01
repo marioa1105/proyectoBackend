@@ -37,8 +37,8 @@ let MODO = 'FORK';
 let infoProcess = {};
 dotenv.config();
 
-let FACEBOOK_CLIENT_ID = '599012854419306';//process.env.FACEBOOK_CLIENT_ID;
-let FACEBOOK_CLIENT_SECRET = 'b0d58d2bd066436c7f92a2f9852a1b1a';//process.env.FACEBOOK_KEY;
+let FACEBOOK_CLIENT_ID = process.env.FACEBOOK_CLIENT_ID;
+let FACEBOOK_CLIENT_SECRET = process.env.FACEBOOK_KEY;
 PORT = process.env.PORT;
 (function () {
 
