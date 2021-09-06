@@ -40,6 +40,10 @@ dotenv.config();
 let FACEBOOK_CLIENT_ID = process.env.FACEBOOK_CLIENT_ID;
 let FACEBOOK_CLIENT_SECRET = process.env.FACEBOOK_KEY;
 PORT = process.env.PORT;
+const nodemailer = require('nodemailer');
+
+const twilioClient = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+
 (function () {
 
     if (process.argv.length >= 3) {        
@@ -250,7 +254,10 @@ else {
     app.get('/logout', auth, (req, res) => {
         req.session.destroy((err) => {
             if (err) return next(err)
-
+            const transporter = getTransportEthereal();
+            let subject = `Logout => ${req.user.displayName} - ${new Date().toLocaleString()}`;
+            let html = '<h1 style="color: blue;">Aviso de Logout</h1>'
+            sendMail(transporter,'Servidor Node Js','breana.zemlak87@ethereal.email',subject,html);
             let user = req.user.displayName;
             req.logout();
             res.render('logout', { 'userName': user });
@@ -319,8 +326,80 @@ else {
 
     })
 
+    function getTransportEthereal(){
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.ethereal.email',
+            port: 587,
+            auth: {
+                user: 'breana.zemlak87@ethereal.email',
+                pass: 'QgHrZgXvfQAA9h8fum'
+            }
+        });
+
+        return transporter;
+    }
+
+    function getTransportGmail(){
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',            
+            auth: {
+                user: process.env.GMAIL_USER,
+                pass: process.env.GMAIL_PASS
+            }
+        });
+
+        return transporter;
+    }
+
+    function sendMail(transporter, from, to, subject, html, attachment){
+        let mailOption = {};
+        if (attachment == undefined){
+            mailOption = {
+                from: from,
+                to: to,
+                subject: subject,
+                html: html
+            };
+        }
+        else{
+            mailOption = {
+                from: from,
+                to: to,
+                subject: subject,
+                html: html,
+                attachments: attachment
+            };
+        }
+        
+
+        transporter.sendMail(mailOption, (err,info)=>{
+            if(err){
+                console.log("Sendmail " + err);
+                return;
+            }
+            console.log(info);
+        })
+    }
+
     app.get('/', auth, (req, res) => {
-        //res.render('index');
+        
+        const transporter = getTransportEthereal();
+        let subject = `Login => ${req.user.displayName} - ${new Date().toLocaleString()}`;
+        let html = '<h1 style="color: blue;">Aviso de Login</h1>'
+        sendMail(transporter,'Servidor Node Js','breana.zemlak87@ethereal.email',subject,html);    
+        
+        const transporterGmail = getTransportGmail();
+        let email = req.user.emails.length == 0 ? "" : req.user.emails[0].value;
+        let attachment = [];
+
+        if(req.user.photos.length > 0) {
+            console.log(req.user.photos[0].value);
+            attachment.push({
+                path:req.user.photos[0].value
+            });
+        } 
+        html = '<h1 style="color: blue;">Aviso de Login - Cambiar extension de adjunto a jpg</h1>'
+        sendMail(transporterGmail,'Servidor Node Js',email,subject,html,attachment);    
         res.redirect("/productos/addProducto");
     });
 
@@ -342,6 +421,16 @@ else {
         })
 
         socket.on("sendMessage", message => {
+            if(message.text.includes('administrador')){
+                twilioClient.messages.create({
+                    body: `${message.author.nombre} ${message.author.apellido} => ${message.text}`,
+                    from: process.env.TWILIO_PHONE_NUMBER,
+                    to: process.env.TWILIO_PHONE_TO
+                })
+                .then(message => console.log(message.sid))
+                .catch(console.log)
+            }
+            
 
             chat.addMessage(message).then(() => {
                 chat.getMessages().then(data => {
