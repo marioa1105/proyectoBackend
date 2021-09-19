@@ -32,6 +32,9 @@ const usuarioService = require('./data/UsuariosData');
 const dotenv = require('dotenv');
 const { platform } = require('os');
 const numCpus = require('os').cpus().length;
+const {graphqlHTTP} = require('express-graphql');
+const {buildSchema} = require('graphql');
+const {schema, root} = require('./GraphqlApp');
 let MODO = 'FORK';
 
 let infoProcess = {};
@@ -174,7 +177,11 @@ else {
         saveUninitialized: false
 
     }));
-
+    app.use('/graphql',graphqlHTTP({
+        schema: schema,
+        rootValue: root,
+        graphiql: true
+    }));
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(express.static(__dirname + '/public'));
