@@ -2,6 +2,8 @@ const Producto = require('../api/producto');
 const mongoose = require('mongoose');
 const Model = require('../model/Productos');
 const {mongo} = require('./config');
+const {ObjectId} = require('mongodb');
+
 /*const {mySqlConfig} = require('./config');
 const knex = require('knex')(mySqlConfig);*/
 
@@ -66,7 +68,8 @@ class ProductoData{
     }
     async getById(id){
         try{
-            let producto = Model.find({_id: id});
+            let _Id = ObjectId(id);
+            let producto = await Model.findOne({_id: _Id.id});
             /*let row  = await knex('productos').where('id', id);
             let producto = this.getObjectByRow(row[0]);*/
             return producto;
@@ -93,7 +96,8 @@ class ProductoData{
     }
     async delete(id){
         try{
-            await Model.deleteOne({_id: id});
+            let _Id = ObjectId(id);
+            await Model.deleteOne({_id: _Id.id});
             //await knex('productos').where('id',id).del();
         }
         catch(err){

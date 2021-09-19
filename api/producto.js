@@ -13,12 +13,12 @@ class Producto{
         this.fileWarn = log4js.getLogger('fileWarn');
     } 
     
-    saveProduct(item){
+    async saveProduct(item){
         try{                        
             this.consolaInfo.info('agregando producto');
             let Data = new ProductoData();
             
-            Data.save(item);
+            await Data.save(item);
             this.consolaInfo.info('producto guardado');
             return item;
         }
@@ -34,7 +34,7 @@ class Producto{
         try{
             let Data = new ProductoData();
             let items = new Array();
-            this.consolaInfo.info('Valida productos existentes');
+            //this.consolaInfo.info('Valida productos existentes');
             items = Data.getAll();
             if (items == 0){
                 this.fileWarn.warn('No hay productos cargados')
@@ -53,12 +53,12 @@ class Producto{
         try{
             let Data = new ProductoData();
             let obj = await Data.getById(id);
-            this.consolaInfo.info('Valida si existe el producto');
-            if(obj.length == 0){
+            //this.consolaInfo.info('Valida si existe el producto');
+            if(typeof(obj) == undefined){
                 
                 throw new Error("Producto no encontrado");            
             }
-            return obj[0];
+            return obj;
         }
         catch(err){
             this.consolaInfo.error('Error al recuperar el producto ' + err.message);
