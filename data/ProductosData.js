@@ -43,9 +43,10 @@ class ProductoData{
     }
     async save(producto){
         try{                        
-            await Model.create(producto);
+            let nuevo = await Model.create(producto);
+            
             /*await knex('productos').insert(producto);*/
-            return true;
+            return nuevo;
         }
         catch(err){
             throw new Error(`Error al insertar: ${err.message}`);
@@ -69,9 +70,14 @@ class ProductoData{
     async getById(id){
         try{
             let _Id = ObjectId(id);
-            let producto = await Model.findOne({_id: _Id.id});
+            
+            let producto = await Model.findOne({_id: id});
+            
+            
             /*let row  = await knex('productos').where('id', id);
             let producto = this.getObjectByRow(row[0]);*/
+            
+            console.log(producto);
             return producto;
         }
         catch(err){
@@ -97,7 +103,8 @@ class ProductoData{
     async delete(id){
         try{
             let _Id = ObjectId(id);
-            await Model.deleteOne({_id: _Id.id});
+            await Model.deleteMany({_id: id});
+            //await Model.deleteMany({_id: _Id.id});
             //await knex('productos').where('id',id).del();
         }
         catch(err){

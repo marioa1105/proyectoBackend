@@ -18,9 +18,10 @@ class Producto{
             this.consolaInfo.info('agregando producto');
             let Data = new ProductoData();
             
-            await Data.save(item);
+            let nuevo = await Data.save(item);
             this.consolaInfo.info('producto guardado');
-            return item;
+            
+            return nuevo;
         }
         catch(err){
             this.consolaInfo.error('Error al grabar producto ' + err.message);
