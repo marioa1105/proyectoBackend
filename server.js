@@ -1,25 +1,27 @@
 const express = require('express');
-const Producto = require('./api/producto.js');
-const Chat = require('./api/chat.js');
-const productoRoutes = require('./routes/routeProductos.js');
 const handlebars = require('express-handlebars');
-const { json } = require('express');
-const faker = require('faker');
-faker.locale = "es";
 const app = express();
 const compression = require('compression');
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
-let PORT = 8080;
-const productoService = new Producto();
 const { fork } = require('child_process');
 const cluster = require('cluster');
-const chat = new Chat();
-
+const faker = require('faker');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const { use } = require('./routes/routeProductos.js');
+const dotenv = require('dotenv');
+dotenv.config();
 
+const Producto = require('./api/producto.js');
+const Chat = require('./api/chat.js');
+
+const productoRoutes = require('./routes/routeProductos.js');
+faker.locale = "es";
+
+
+let PORT = 8080;
+const productoService = new Producto();
+const chat = new Chat();
 const FileStore = require('session-file-store')(session);
 const MongoStore = require('connect-mongo');
 const advancedOptions = { useNewUrlParser: true, useUnifiedToplogy: true };
@@ -29,7 +31,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const usuarioService = require('./data/UsuariosData');
 
-const dotenv = require('dotenv');
+
 const { platform } = require('os');
 const numCpus = require('os').cpus().length;
 const {graphqlHTTP} = require('express-graphql');
@@ -38,7 +40,7 @@ const {schema, root} = require('./GraphqlApp');
 let MODO = 'FORK';
 
 let infoProcess = {};
-dotenv.config();
+
 
 let FACEBOOK_CLIENT_ID = process.env.FACEBOOK_CLIENT_ID;
 let FACEBOOK_CLIENT_SECRET = process.env.FACEBOOK_KEY;
@@ -46,14 +48,30 @@ PORT = process.env.PORT;
 const nodemailer = require('nodemailer');
 
 const twilioClient = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
-
+let cmdPort = 'PORT-';
+let cmdFaceId = 'FACEID-';
+let cmdFaceSec = 'FACESEC-';
+let cmdModo = 'MODO-';
 (function () {
 
     if (process.argv.length >= 3) {        
+        for(let i = 2; i < process.argv.length; i++){
+            if(process.argv[i].includes(cmdPort)){
+                PORT = process.argv[i].substring(cmpPort.length, process.argv[i].length);
+            }
+            if(process.argv[i].includes(cmdFaceId)){
+                FACEBOOK_CLIENT_ID = process.argv[i].substring(cmdFaceId.length, process.argv[i].length);
+            }
+            if(process.argv[i].includes(cmdFaceSec)){
+                FACEBOOK_CLIENT_SECRET = process.argv[i].substring(cmdFaceSec.length, process.argv[i].length);
+            }
+            if(process.argv[i].includes(cmdModo)){
+                MODO = process.argv[i].substring(cmdModo.length, process.argv[i].length);
+            }
+        }
+        
 
-        PORT = process.argv[2];
-
-        if (process.argv[3] != undefined && process.argv[4] != undefined) {
+        /*if (process.argv[3] != undefined && process.argv[4] != undefined) {
             FACEBOOK_CLIENT_ID = process.argv[3];
             FACEBOOK_CLIENT_SECRET = process.argv[4];
         }
@@ -61,7 +79,7 @@ const twilioClient = require('twilio')(process.env.TWILIO_SID, process.env.TWILI
             if (process.argv[5].toUpperCase() == 'FORK' || process.argv[5].toUpperCase() == 'CLUSTER') {
                 MODO = process.argv[5].toUpperCase();
             }
-        }
+        }*/
         
     }
 

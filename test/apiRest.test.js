@@ -11,6 +11,8 @@ describe("test api rest",function(){
             let response = await request.post('/api/productos/guardar').send({title : "ProductoMocha",
             price: 10,
             thumbnail:"ImagenMocha"});
+            id = response.body.id;
+            console.log(id);
             expect(response.status).to.eql(200);          
         });
     });
@@ -23,5 +25,11 @@ describe("test api rest",function(){
         });
     });
     
-
+    describe('GET', () => {
+        it("Verificar listar",async function(){            
+            let response = await request.get('/api/productos/listar');
+            
+            expect(response.status).to.eql(200);
+        });
+    });
 });

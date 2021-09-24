@@ -2,9 +2,7 @@ const express = require('express');
 const route = express.Router();
 const Producto = require('../api/producto')
 let serviceProducto = new Producto();
-route.get('/',(req,res)=>{
 
-});
 
 
 route.get('/productos/listar',(req,res)=>{

@@ -1,7 +1,10 @@
-const ProductoData = require('../data/ProductosData');
+const Factory = require('../data/factory/productoFactory');
+const dotenv = require('dotenv');
+dotenv.config();
 const log4js = require("log4js");
 const config = require('../helpers/Logger');
 log4js.configure(config);
+const ProductoData = Factory.getFactory(process.env.PROVIDER);
 class Producto{     
     constructor(){
         this.title = "";
@@ -16,9 +19,9 @@ class Producto{
     async saveProduct(item){
         try{                        
             this.consolaInfo.info('agregando producto');
-            let Data = new ProductoData();
+        
             
-            let nuevo = await Data.save(item);
+            let nuevo = await ProductoData.save(item);
             this.consolaInfo.info('producto guardado');
             
             return nuevo;
@@ -33,10 +36,10 @@ class Producto{
     }
     getProducts(){
         try{
-            let Data = new ProductoData();
+            
             let items = new Array();
             //this.consolaInfo.info('Valida productos existentes');
-            items = Data.getAll();
+            items = ProductoData.getAll();
             if (items == 0){
                 this.fileWarn.warn('No hay productos cargados')
                 throw new Error("No hay productos cargados");
@@ -52,8 +55,8 @@ class Producto{
     }
     async getProductById(id){
         try{
-            let Data = new ProductoData();
-            let obj = await Data.getById(id);
+            
+            let obj = await ProductoData.getById(id);
             //this.consolaInfo.info('Valida si existe el producto');
             if(typeof(obj) == undefined){
                 
@@ -71,9 +74,9 @@ class Producto{
     }
     async updateProduct(prod, id){
         try{
-            let Data = new ProductoData();
+            
             prod.id = id;
-            await Data.update(prod);
+            await ProductoData.update(prod);
             
             return this.getProducts();
         }catch(error){
@@ -82,8 +85,8 @@ class Producto{
     }
     async deleteProduct(id){
         try{
-            let Data = new ProductoData();
-            await Data.delete(id);
+            
+            await ProductoData.delete(id);
             return this.getProducts();
         }catch(error){
             throw error;

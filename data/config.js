@@ -19,5 +19,6 @@ const sqlite3 = {
 
 module.exports = { mySqlConfig: mysql, 
                     sqlite3Config: sqlite3,
-                    mongo: "mongodb://localhost:27017/ecommerce"
+                    mongo: "mongodb://localhost:27017/ecommerce",
+                    provider: "mongo"
                  };

@@ -10,7 +10,7 @@ describe("test",function(){
         let itemNuevo = await apiProducto.saveProduct({title : "ProductoMocha",
                                 price: 10,
                                 thumbnail:"ImagenMocha"})
-        id = itemNuevo._id;                                
+        id = itemNuevo.id;                                
         let comparacion = {
             title: itemNuevo.title,
             price: itemNuevo.price,
@@ -30,7 +30,6 @@ describe("test",function(){
     it("Verifica que exista el elemento agregado",async function(){
         let apiProducto = new Producto();  
         let item = await apiProducto.getProductById(id);
-        console.log(id);
         assert.notStrictEqual(item,null);
 
     });
