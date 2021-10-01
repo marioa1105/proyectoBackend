@@ -4,9 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    
     "test": "mocha ./test/mocha/producto.test.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "set NODE_ENV=development&& node server",
+    "prod": "set NODE_ENV=production&& node server"
   },
   "author": "",
   "license": "ISC",
@@ -39,7 +40,9 @@
     "socket.io": "^4.1.2",
     "sqlite3": "^5.0.2",
     "supertest": "^6.1.6",
-    "twilio": "^3.67.1"
+    "twilio": "^3.67.1",
+    "uuid": "^8.3.2",
+    "yargs": "^17.2.1"
   },
   "engines": {
     "node": ">=14.0.0",

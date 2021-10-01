@@ -1,10 +1,11 @@
 const Factory = require('../data/factory/productoFactory');
-const dotenv = require('dotenv');
-dotenv.config();
+const env = require('../config/config');
+
 const log4js = require("log4js");
 const config = require('../helpers/Logger');
 log4js.configure(config);
-const ProductoData = Factory.getFactory(process.env.PROVIDER);
+console.log(`ENV: ${env.NODE_ENV}`);
+const ProductoData = Factory.getFactory(env.PROVIDER);
 class Producto{     
     constructor(){
         this.title = "";

@@ -9,7 +9,9 @@ const cluster = require('cluster');
 const faker = require('faker');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const config = require('./config/config');
 const dotenv = require('dotenv');
+const args = require('yargs').argv;
 dotenv.config();
 
 const Producto = require('./api/producto.js');
@@ -30,7 +32,7 @@ const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const usuarioService = require('./data/UsuariosData');
-
+const env = require('./config/config');
 
 const { platform } = require('os');
 const numCpus = require('os').cpus().length;
@@ -42,18 +44,18 @@ let MODO = 'FORK';
 let infoProcess = {};
 
 
-let FACEBOOK_CLIENT_ID = process.env.FACEBOOK_CLIENT_ID;
-let FACEBOOK_CLIENT_SECRET = process.env.FACEBOOK_KEY;
+let FACEBOOK_CLIENT_ID = env.FACEBOOK_CLIENT_ID;
+let FACEBOOK_CLIENT_SECRET = env.FACEBOOK_KEY;
 PORT = process.env.PORT;
 const nodemailer = require('nodemailer');
 
-const twilioClient = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+//const twilioClient = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 let cmdPort = 'PORT-';
 let cmdFaceId = 'FACEID-';
 let cmdFaceSec = 'FACESEC-';
 let cmdModo = 'MODO-';
 (function () {
-
+    console.log(`PORT: ${args.port}`);
     if (process.argv.length >= 3) {        
         for(let i = 2; i < process.argv.length; i++){
             if(process.argv[i].includes(cmdPort)){
@@ -82,6 +84,7 @@ let cmdModo = 'MODO-';
         }*/
         
     }
+    PORT = args.port || 8080;
 
     infoProcess = {
         ParamsIn: process.argv.map(x => { return x; }),
@@ -447,13 +450,13 @@ else {
 
         socket.on("sendMessage", message => {
             if(message.text.includes('administrador')){
-                twilioClient.messages.create({
+                /*twilioClient.messages.create({
                     body: `${message.author.nombre} ${message.author.apellido} => ${message.text}`,
                     from: process.env.TWILIO_PHONE_NUMBER,
                     to: process.env.TWILIO_PHONE_TO
                 })
                 .then(message => console.log(message.sid))
-                .catch(console.log)
+                .catch(console.log)*/
             }
             
 
