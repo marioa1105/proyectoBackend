@@ -1,10 +1,10 @@
-const Factory = require('../data/factory/productoFactory');
+const Factory = require('../DAO/factory/productoFactory');
 const env = require('../config/config');
 
 const log4js = require("log4js");
 const config = require('../helpers/Logger');
 log4js.configure(config);
-console.log(`ENV: ${env.NODE_ENV}`);
+
 const ProductoData = Factory.getFactory(env.PROVIDER);
 class Producto{     
     constructor(){

@@ -1,4 +1,4 @@
-const ProductoFactory = require("../data/factory/productoFactory");
+const ProductoFactory = require("../DAO/factory/productoFactory");
 
 class ProductoDTO{
     constructor(id, title, price, thumbnail){

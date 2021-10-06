@@ -31,14 +31,15 @@ const passport = require('passport');
 const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
-const usuarioService = require('./data/UsuariosData');
+const Factory = require('./DAO/factory/UsuarioFactory');
+const usuarioService = Factory.getFactory('mongo');
 const env = require('./config/config');
 
 const { platform } = require('os');
 const numCpus = require('os').cpus().length;
 const {graphqlHTTP} = require('express-graphql');
 const {buildSchema} = require('graphql');
-const {schema, root} = require('./GraphqlApp');
+const {schema, root} = require('./Routes/GraphqlApp');
 let MODO = 'FORK';
 
 let infoProcess = {};

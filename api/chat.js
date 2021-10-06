@@ -1,5 +1,7 @@
 //const Archivo = require('../helpers/Archivos.js');
-const chatData = require('../data/ChatData');
+const Factory = require('../DAO/factory/ChatFactory');
+const chatData = Factory.getFactory('mongo');
+
 const { normalize, schema } = require('normalizr');
 class Author{
     constructor(){
