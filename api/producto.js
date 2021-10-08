@@ -66,9 +66,9 @@ class Producto{
             return obj;
         }
         catch(err){
-            this.consolaInfo.error('Error al recuperar el producto ' + err.message);
-            this.fileErr.error('Error al recuperar el producto '  + err.message);
-            this.fileWarn.warn('Error al recuperar el producto '  + err.message);
+            //this.consolaInfo.error('Error al recuperar el producto ' + err.message);
+            //this.fileErr.error('Error al recuperar el producto '  + err.message);
+            //this.fileWarn.warn('Error al recuperar el producto '  + err.message);
             throw Error(err.message);
         }
         

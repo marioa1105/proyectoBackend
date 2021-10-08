@@ -1,6 +1,8 @@
 
+const {graphqlHTTP} = require('express-graphql');
 const {buildSchema} = require('graphql');
 const Producto = require('../api/producto');
+const config = require('../config/config');
 var controller = new Producto();
 
 var schema = buildSchema(`type Query{
@@ -40,16 +42,20 @@ var eliminarProducto = async function eliminarProducto(id){
     let productos = await controller.deleteProduct(id);
     return productos;
 }
+let getById = async function({id}){
+    return controller.getProductById(id);
+}
 var root = {
-    producto: controller.getProductById,
+    producto: getById,
     productos: controller.getProducts,
     updateProducto: updateProducto,
     guardarProducto: guardarProducto,
     eliminarProducto: eliminarProducto
 };
 
-
-module.exports = {
+let graphql = graphqlHTTP({
     schema: schema,
-    root: root
-};
+    rootValue:root,
+    graphiql: config.GRAPHIQL == 'true'
+})
+module.exports = graphql;
