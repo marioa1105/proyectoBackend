@@ -20,11 +20,12 @@ app.handle("/", async (req) => {
           <title>servest</title>
         </head>
         <body>
-            
-              <h1 style={{color:'blue'}}>Hello Servest con React!</h1>
-              <h2 style={{color:'brown'}}>Visitas: {++visitas}</h2>
-              <h3 style={{color:'purple'}}>FyH: {new Date().toLocaleString()}</h3>
-              <input type="submit" value="Submit" />
+            <select name="select">
+              <option style={{color:'blue'}} value="value1">Blue</option>
+              <option style={{color:'brown'}} value="value2">Brown</option>
+              <option style={{color:'purple'}} value="value3">Purple</option>
+            </select>
+              
             
               
             
